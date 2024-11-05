@@ -4,7 +4,7 @@ import json
 from tqdm import tqdm
 
 from get_data import load_file, get_multi_csv, get_multi_json
-from eval import run_llm, eval
+from eval import run_llm, get_response, get_score
 
 # 設定參數
 parser = argparse.ArgumentParser(description="Evaluate LLM on Traditional Chinese + English datasets using litellm")
@@ -27,6 +27,11 @@ if __name__ == "__main__":
     # print(questions)
     result = []
     for i in range(len(questions)):
-        response = eval(questions[i], A[i], B[i], C[i], D[i], args.model, args.language)
+        response = get_response(questions[i], A[i], B[i], C[i], D[i], args.model, args.language)
         # result.append(response['content'])
         print("****", response['choices'][0]['message']['content'])
+
+        result.append(response['choices'][0]['message']['content'])
+        
+    score = get_score(result, answers)
+    print('score = ', score)
