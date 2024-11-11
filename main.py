@@ -3,7 +3,7 @@ import argparse
 import json
 from tqdm import tqdm
 
-from utils import get_multi_csv, get_multi_json, get_multi_pq, output_score
+from utils import get_multi_csv, get_multi_json, get_multi_pq, output_response, output_score
 from eval import get_response, get_score, clean_response
 
 # 設定參數
@@ -11,7 +11,8 @@ parser = argparse.ArgumentParser(description="Evaluate LLM on Traditional Chines
 parser.add_argument("--model", type=str, default="ollama/llama3.2", help="Model name for litellm API")
 parser.add_argument("--input_file", type=str, default="./data/test.csv", help="Evaluation dataset file path (supports CSV, JSON, PARQUET)")
 parser.add_argument("--input_dir", type=str, help="Evaluation dataset file path (supports CSV, JSON)")
-parser.add_argument("--output_file", type=str, default='./output.csv', help="Path to save evaluation results")
+parser.add_argument("--response_file", type=str, required=False, help="Path to save response")
+parser.add_argument("--score_file", type=str, required=True, help="Path to save evaluation results")
 parser.add_argument("--language", "--lang", required=False, type=str, default='eng', help="english input 'eng', chinese iniput 'chi'")
 args = parser.parse_args()
 
@@ -39,5 +40,9 @@ if __name__ == "__main__":
         ori_result.append(response['choices'][0]['message']['content'])
         
     score = get_score(result, answers)
-    output_score(score, result, ori_result, answers, args.output_file)
+
+    if args.response_file:
+        output_response(score, result, ori_result, answers, args.response_file)
+    
+    output_score(args.input_file, score, args.score_file)
     # print('score = ', score)
