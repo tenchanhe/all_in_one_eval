@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-import ast
+import os
 
 
 def load_file(input_file):
@@ -95,7 +95,7 @@ def get_multi_pq(file_path):
 
 
 
-def output_score(score, result, ori_result, answer, output_file):
+def output_response(score, result, ori_result, answer, output_file):
      # 創建一個 DataFrame，包含 score、result 和 answer
     data = {
         "Result": result,
@@ -107,3 +107,18 @@ def output_score(score, result, ori_result, answer, output_file):
     with open(output_file, 'w') as file:
         file.write(f"Score,{score}\n")  # 寫入 score 作為第一行
         pd.DataFrame(data).to_csv(file, index=False)  # 寫入 result 和 answer 從第二行開始
+
+
+def output_score(dataset_name, score, score_file):
+    dataset_name = os.path.splitext(dataset_name)[0]
+    if os.path.exists(score_file):
+        df = pd.read_csv(score_file)
+        new_row = pd.DataFrame([[dataset_name, score]], columns=['dataset_name', 'score'])
+        df = pd.concat([df, new_row], ignore_index=True)
+    else:
+        df = pd.DataFrame([[dataset_name, score]], columns=['dataset_name', 'score'])
+    
+    # 以覆蓋模式寫回 CSV 文件
+    df.to_csv(score_file, index=False)
+
+    # print(f"Appended dataset '{dataset_name}' with score {score} to '{score_file}'")
