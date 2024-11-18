@@ -3,16 +3,6 @@ import json
 import os
 
 
-def load_file(input_file):
-    if input_file.endswith(".csv"):
-        data = pd.read_csv(input_file)
-    elif input_file.endswith(".json"):
-        with open(input_file, "r", encoding="utf-8") as f:
-            data = pd.DataFrame(json.load(f))
-    else:
-        raise ValueError("Unsupported file format. Use CSV or JSON.")
-    return data
-
 def get_multi_csv(file_path):
     df = pd.read_csv(file_path)
 
@@ -70,10 +60,6 @@ def get_multi_pq(file_path):
         num_to_letter = {0: 'A', 1: 'B', 2: 'C', 3: 'D'}
 
         for index, row in df.iterrows():
-            # 將 choices 字串轉換為列表
-            # parsed_choices = ast.literal_eval(row["choices"])
-            # print(row["choices"])
-            # 將每個選項分別加入對應的列表
             choices_A.append(row["choices"][0])
             choices_B.append(row["choices"][1])
             choices_C.append(row["choices"][2])
