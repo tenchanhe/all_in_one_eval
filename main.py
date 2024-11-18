@@ -10,7 +10,6 @@ from eval import get_response, get_score, clean_response
 parser = argparse.ArgumentParser(description="Evaluate LLM on Traditional Chinese + English datasets using litellm")
 parser.add_argument("--model", type=str, default="ollama/llama3.2", help="Model name for litellm API")
 parser.add_argument("--input_file", type=str, default="./data/test.csv", help="Evaluation dataset file path (supports CSV, JSON, PARQUET)")
-parser.add_argument("--input_dir", type=str, help="Evaluation dataset file path (supports CSV, JSON)")
 parser.add_argument("--response_file", type=str, required=False, help="Path to save response")
 parser.add_argument("--score_file", type=str, required=True, help="Path to save evaluation results")
 parser.add_argument("--language", "--lang", required=False, type=str, default='eng', help="english input 'eng', chinese iniput 'chi'")
